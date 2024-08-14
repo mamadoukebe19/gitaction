@@ -4,9 +4,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v4.0.3 # Updated to use the stable version
-
       - name: Deploy to Server 1
         uses: easingthemes/ssh-deploy@v2.1.5  # Prefer using a stable version tag
         env:
@@ -20,7 +17,9 @@ jobs:
         with:
           host: ${{ secrets.HOST_DNS }}
           username: ${{ secrets.USERNAME }}
-	script: |
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo apt-get update
             sudo apt-get install -y apache2
             sudo systemctl start apache2
             sudo systemctl enable apache2
